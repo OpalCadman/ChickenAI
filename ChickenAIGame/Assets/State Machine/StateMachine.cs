@@ -1,7 +1,6 @@
-﻿//URGENT: Please tell me there is an easier way to get the last item in a list. This code looks so much worse than it does in C++ with vectors.
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class StateMachine : MonoBehaviour {
     //This is the state machine that controls which state is currently active
@@ -27,8 +26,8 @@ public class StateMachine : MonoBehaviour {
         //it from the stack.
         Debug.Log("****\tCleaning\t****");
         while (states.Count != 0) {
-            states[states.Count - 1].CleanUp();
-            states.Remove(states[states.Count - 1]);
+            states.Last().CleanUp();
+            states.Remove(states.Last());
         }
     }
     public void PushState(GameState state) {
@@ -37,11 +36,11 @@ public class StateMachine : MonoBehaviour {
         //call it's Initialise() function.
         Debug.Log("****\tPushing\t****");
         if (states.Count != 0) {
-            states[states.Count - 1].Pause();
+            states.Last().Pause();
         }
 
         states.Add(state);
-        states[states.Count - 1].Initialise();
+        states.Last().Initialise();
     }
     public void PopState() {
         //Starts by checking if there is a state on the stack to pop off, if there is
@@ -50,26 +49,26 @@ public class StateMachine : MonoBehaviour {
         //is then we call it's Resume() function to reactive it from where it left off.
         Debug.Log("****\tPopping\t****");
         if (states.Count != 0) {
-            states[states.Count - 1].CleanUp();
-            states.Remove(states[states.Count - 1]);
+            states.Last().CleanUp();
+            states.Remove(states.Last());
         }
 
         if (states.Count != 0) {
-            states[states.Count - 1].Resume();
+            states.Last().Resume();
         }
     }
 
     public void HandleEvents() {
         //Just calls the HandleEvents() function of the currently active state.
-        states[states.Count - 1].HandleEvents(this);
+        states.Last().HandleEvents(this);
     }
     public void Update() {
         //Just calls the Update() function of the currently active state.
-        states[states.Count - 1].Update(this);
+        states.Last().Update(this);
     }
     public void Render() {
         //Just calls the Render() function of the currently active state.
-        states[states.Count - 1].Render(this);
+        states.Last().Render(this);
     }
 
     public bool Running() { return isRunning; }
