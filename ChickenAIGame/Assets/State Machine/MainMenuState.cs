@@ -22,6 +22,11 @@ public class MainMenuState : GameState {
             //call the CleanUp() function and will Resume() the state next
             //in the stack.
         }
+        else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Return)) {
+            UnityEngine.Debug.Log("[Main Menu] Entering Coop State");
+            stateMachine.PushState(CoopState.Instance());
+            //This is just temporary whilst we have no UI.
+        }
     }
     override public void Update(StateMachine stateMachine) {
  
