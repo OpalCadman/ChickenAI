@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿
+public class BaseChicken {
 
-public class BaseChicken : MonoBehaviour {
-
+    public int uniqueID;
+    //Can't use their name's as an ID since you could easliy end up with 2 chickens with the same name
+    //so we will just assign them an ID on creation, we can easily just track the last ID that was given
+    //to a chicken and then add 1 to it. That would be the new ID for the next chicken.
     public int ageInDays;
     //Simple age that increments by 1 after each day. Should be taken into account when calculating
     //breeding and racing potency. 
