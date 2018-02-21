@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Race/Race.unity
+- path: Assets/State Machine/StateMachineTesting.unity
   isLoaded: 1
   isActive: 1
