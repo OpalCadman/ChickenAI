@@ -1,9 +1,7 @@
 ﻿
-public class CoopTraining
-{
+public class CoopTraining {
 
-    public enum TrainingType
-    {
+    public enum TrainingType {
         Str = 0,
         Dex = 1,
         Int = 2,
@@ -11,15 +9,13 @@ public class CoopTraining
         All = 4,
     }
 
-    public void AssignChicken(PlayerChicken chicken, TrainingType type)
-    {
+    public void AssignChicken(PlayerChicken chicken, TrainingType type) {
         //We would check if the chicken is available before calling this function.
         chicken.currentStatus = PlayerChicken.Status.Training;
         chicken.daysLeftUntilActive = 2;
         //At the end of each day we will need to loop through all chickens decrementing this value by one.
 
-        switch (type)
-        {
+        switch (type) {
             case TrainingType.Str:
                 chicken.strengthStat += 5;
                 chicken.intelligenceStat -= 2;

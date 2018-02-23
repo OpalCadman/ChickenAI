@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ChickenCoop : MonoBehaviour {
 
@@ -9,9 +10,10 @@ public class ChickenCoop : MonoBehaviour {
 
     private DayManager dayManager = DayManager.Instance();
     private CoopTraining training = CoopTraining.Instance();
-    //Keep a pointer to our dayManager instance for use in this class. Saves us from writing DayManager.Instance(). all the time.
+    //Basically pointers or shortcuts to our other files rather than sticking everything in one file.
 
     public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
+    public Dictionary<int, BaseChicken> enemyChickensEasy = new Dictionary<int, BaseChicken>();
 
     public void Start() {
         List<PlayerChicken> chickens = ChickenGenerator.genPChicken(6);
@@ -23,41 +25,14 @@ public class ChickenCoop : MonoBehaviour {
             //from a specific chicken.
         }
 
+        List<BaseChicken> eChickens = ChickenGenerator.genEChicken(16);
 
-        Debug.Log("Day: " + dayManager.currentDay);
-        Debug.Log("Age: " + playerChickens[0].ageInDays);
-        Debug.Log("Status: " + playerChickens[0].currentStatus);
-        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
-        Debug.Log("Strength: " + playerChickens[0].strengthStat);
-        Debug.Log("Intelligence: " + playerChickens[0].intelligenceStat);
+        foreach (BaseChicken chicken in eChickens) {
+            enemyChickensEasy.Add(chickenCount, chicken);
+            chickenCount++;
+        }
 
-        training.AssignChicken(playerChickens[0], CoopTraining.TrainingType.Str);
-        Debug.Log("Chicken is assigned to Strength training.");
-        Debug.Log("Status: " + playerChickens[0].currentStatus);
-        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
-        Debug.Log("Strength: " + playerChickens[0].strengthStat);
-        Debug.Log("Dexterity: " + playerChickens[0].intelligenceStat);
-
-        dayManager.AdvanceDay();
-        Debug.Log("Next Day.");
-        ChickenDecrement();
-        Debug.Log("Day: " + dayManager.currentDay);
-        Debug.Log("Status: " + playerChickens[0].currentStatus);
-        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
-
-        dayManager.AdvanceDay();
-        Debug.Log("Next Day.");
-        ChickenDecrement();
-        Debug.Log("Day: " + dayManager.currentDay);
-        Debug.Log("Status: " + playerChickens[0].currentStatus);
-        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
-
-        dayManager.AdvanceDay();
-        Debug.Log("Next Day.");
-        ChickenDecrement();
-        Debug.Log("Day: " + dayManager.currentDay);
-        Debug.Log("Status: " + playerChickens[0].currentStatus);
-        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+        CalculatePercentile(0);
     }
 
     private void ChickenDecrement() {
@@ -71,6 +46,29 @@ public class ChickenCoop : MonoBehaviour {
                     chicken.currentStatus = PlayerChicken.Status.Idle;
                 }
             }
+        }
+    }
+
+    private void CalculatePercentile(int chickenID) {
+
+        Dictionary<int, int> allChickensStats = new Dictionary<int, int>();
+
+        foreach (PlayerChicken chicken in playerChickens.Values) {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        foreach (BaseChicken chicken in enemyChickensEasy.Values)
+        {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        var sortedChickenStats = from statTotal in allChickensStats orderby statTotal.Value ascending select statTotal;
+
+        foreach (var stat in sortedChickenStats)
+        {
+            Debug.Log(stat.Key + stat.Value);
         }
     }
 }

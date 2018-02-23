@@ -34,6 +34,30 @@ static public class ChickenGenerator {
         return chickens;
     }
 
+    static public List<BaseChicken> genEChicken(int noOfChickens) {
+
+        List<BaseChicken> chickens = new List<BaseChicken>();
+
+        for (int i = 0; i < noOfChickens; i++)
+        {
+            BaseChicken chicken = new BaseChicken();
+
+            chicken.chickenName = "Test Dummy";
+
+            List<int> baseStats = genBaseStats(StatTier.Easy);
+            chicken.strengthStat = baseStats[0];
+            chicken.dexterityStat = baseStats[1];
+            chicken.intelligenceStat = baseStats[2];
+            chicken.enduranceStat = baseStats[3];
+
+            chicken.ageInDays = Random.Range(7, 29);
+
+            chickens.Add(chicken);
+        }
+
+        return chickens;
+    }
+
     static private List<int> genBaseStats(StatTier statTier) {
         //This is just the method of generating the base stats for a chicken. If you have a more elaborate method
         //be my guest, all the numbers are just arbitrary since I have no idea how we are going to turn these numbers
