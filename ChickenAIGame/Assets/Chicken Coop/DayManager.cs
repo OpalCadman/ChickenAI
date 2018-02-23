@@ -15,7 +15,8 @@ public class DayManager {
     public int noOfDaysPast;
 
 	public void AdvanceDay() {
-        if((int)currentDay != 6) {
+        noOfDaysPast++;
+        if ((int)currentDay != 6) {
             currentDay++;
         } else {
             currentDay = 0;

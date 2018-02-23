@@ -8,6 +8,7 @@ public class ChickenCoop : MonoBehaviour {
     //chickens a unique ID.
 
     private DayManager dayManager = DayManager.Instance();
+    private CoopTraining training = CoopTraining.Instance();
     //Keep a pointer to our dayManager instance for use in this class. Saves us from writing DayManager.Instance(). all the time.
 
     public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
@@ -22,11 +23,54 @@ public class ChickenCoop : MonoBehaviour {
             //from a specific chicken.
         }
 
-        Debug.Log(dayManager.currentDay);
-        
-        for(int i = 0; i < 10; i++) {
-            dayManager.AdvanceDay();
-            Debug.Log(dayManager.currentDay);
+
+        Debug.Log("Day: " + dayManager.currentDay);
+        Debug.Log("Age: " + playerChickens[0].ageInDays);
+        Debug.Log("Status: " + playerChickens[0].currentStatus);
+        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+        Debug.Log("Strength: " + playerChickens[0].strengthStat);
+        Debug.Log("Intelligence: " + playerChickens[0].intelligenceStat);
+
+        training.AssignChicken(playerChickens[0], CoopTraining.TrainingType.Str);
+        Debug.Log("Chicken is assigned to Strength training.");
+        Debug.Log("Status: " + playerChickens[0].currentStatus);
+        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+        Debug.Log("Strength: " + playerChickens[0].strengthStat);
+        Debug.Log("Dexterity: " + playerChickens[0].intelligenceStat);
+
+        dayManager.AdvanceDay();
+        Debug.Log("Next Day.");
+        ChickenDecrement();
+        Debug.Log("Day: " + dayManager.currentDay);
+        Debug.Log("Status: " + playerChickens[0].currentStatus);
+        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+
+        dayManager.AdvanceDay();
+        Debug.Log("Next Day.");
+        ChickenDecrement();
+        Debug.Log("Day: " + dayManager.currentDay);
+        Debug.Log("Status: " + playerChickens[0].currentStatus);
+        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+
+        dayManager.AdvanceDay();
+        Debug.Log("Next Day.");
+        ChickenDecrement();
+        Debug.Log("Day: " + dayManager.currentDay);
+        Debug.Log("Status: " + playerChickens[0].currentStatus);
+        Debug.Log("Days until Active: " + playerChickens[0].daysLeftUntilActive);
+    }
+
+    private void ChickenDecrement() {
+        foreach (PlayerChicken chicken in playerChickens.Values) {
+            chicken.ageInDays++;
+
+            if (chicken.daysLeftUntilActive != 0) {
+                chicken.daysLeftUntilActive -= 1;
+
+                if(chicken.daysLeftUntilActive == 0) {
+                    chicken.currentStatus = PlayerChicken.Status.Idle;
+                }
+            }
         }
     }
 }
