@@ -35,6 +35,7 @@ public class PlayerChicken : BaseChicken {
     //so we know when a chicken is able to train or not. This value could also be used during the races, the 
     //lower their endurance is the worse they will perform.
     public Status currentStatus = Status.Idle;
+    public int daysLeftUntilActive;
     private List<ChickenPerk> perkList = new List<ChickenPerk>();
 
     private float breedingPotency;
