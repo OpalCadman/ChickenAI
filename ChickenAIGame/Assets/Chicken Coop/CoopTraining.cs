@@ -17,28 +17,28 @@ public class CoopTraining {
 
         switch (type) {
             case TrainingType.Str:
-                chicken.strengthStat += 5;
-                chicken.intelligenceStat -= 2;
+                chicken.strengthStat += 3;
+                chicken.intelligenceStat -= 1;
                 break;
 
             case TrainingType.Dex:
-                chicken.dexterityStat += 5;
-                chicken.strengthStat -= 2;
+                chicken.dexterityStat += 3;
+                chicken.strengthStat -= 1;
                 break;
 
             case TrainingType.Int:
-                chicken.intelligenceStat += 5;
-                chicken.dexterityStat -= 2;
+                chicken.intelligenceStat += 3;
+                chicken.dexterityStat -= 1;
                 break;
 
             case TrainingType.End:
-                chicken.enduranceStat += 3;
+                chicken.enduranceStat += 2;
                 break;
 
             case TrainingType.All:
-                chicken.strengthStat++;
-                chicken.dexterityStat++;
-                chicken.intelligenceStat++;
+                chicken.strengthStat+=1;
+                chicken.dexterityStat+=1;
+                chicken.intelligenceStat+=1;
                 break;
         }
     }
