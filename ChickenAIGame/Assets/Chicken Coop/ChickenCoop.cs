@@ -19,8 +19,9 @@ public class ChickenCoop : MonoBehaviour {
         List<PlayerChicken> chickens = ChickenGenerator.genPChicken(6);
         //Generate the starting 6 chickens for the player.
         foreach (PlayerChicken chicken in chickens) {
+            chicken.uniqueID = chickenCount;
             playerChickens.Add(chickenCount, chicken);
-            chickenCount++;
+            chickenCount+=1;
             //Add the chickens to the map giving them a unique ID for when we need to retrieve data
             //from a specific chicken.
         }
@@ -28,8 +29,9 @@ public class ChickenCoop : MonoBehaviour {
         List<BaseChicken> eChickens = ChickenGenerator.genEChicken(16);
 
         foreach (BaseChicken chicken in eChickens) {
+            chicken.uniqueID = chickenCount;
             enemyChickensEasy.Add(chickenCount, chicken);
-            chickenCount++;
+            chickenCount+=1;
         }
 
         CalculatePercentile(0);
@@ -68,7 +70,14 @@ public class ChickenCoop : MonoBehaviour {
 
         foreach (var stat in sortedChickenStats)
         {
-            Debug.Log(stat.Key + stat.Value);
+            Debug.Log(stat.Key +" : "+ stat.Value);
         }
+
+        var sortedList = sortedChickenStats.ToList();
+        var index = sortedList.FindIndex(key => key.Key == chickenID);
+
+        int percentile = ((index + 1) * 100) / sortedList.Count;
+        Debug.Log("Chicken " + chickenID + " is in the " + percentile + "th percentile.");
+        
     }
 }
