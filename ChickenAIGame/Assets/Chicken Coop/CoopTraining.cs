@@ -10,35 +10,35 @@ public class CoopTraining {
     }
 
     public void AssignChicken(PlayerChicken chicken, TrainingType type) {
-        //We would check if the chicken is available before calling this function.
+        //We would check if the chicken is available before calling this function. Would also need to check for training slots remaining.
         chicken.currentStatus = PlayerChicken.Status.Training;
         chicken.daysLeftUntilActive = 2;
-        //At the end of each day we will need to loop through all chickens decrementing this value by one.
+        //At the end of each day we loop through all chickens decrementing this value by one.
 
         switch (type) {
             case TrainingType.Str:
-                chicken.strengthStat += 5;
-                chicken.intelligenceStat -= 2;
+                chicken.strengthStat += 3;
+                chicken.intelligenceStat -= 1;
                 break;
 
             case TrainingType.Dex:
-                chicken.dexterityStat += 5;
-                chicken.strengthStat -= 2;
+                chicken.dexterityStat += 3;
+                chicken.strengthStat -= 1;
                 break;
 
             case TrainingType.Int:
-                chicken.intelligenceStat += 5;
-                chicken.dexterityStat -= 2;
+                chicken.intelligenceStat += 3;
+                chicken.dexterityStat -= 1;
                 break;
 
             case TrainingType.End:
-                chicken.enduranceStat += 3;
+                chicken.enduranceStat += 2;
                 break;
 
             case TrainingType.All:
-                chicken.strengthStat++;
-                chicken.dexterityStat++;
-                chicken.intelligenceStat++;
+                chicken.strengthStat+=1;
+                chicken.dexterityStat+=1;
+                chicken.intelligenceStat+=1;
                 break;
         }
     }
