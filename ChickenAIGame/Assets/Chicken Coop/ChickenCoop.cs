@@ -10,6 +10,7 @@ public class ChickenCoop : MonoBehaviour {
 
     private DayManager dayManager = DayManager.Instance();
     private CoopTraining training = CoopTraining.Instance();
+    private CoopBreeding breeding = CoopBreeding.Instance();
     //Basically pointers or shortcuts to our other files rather than sticking everything in one file.
 
     public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
@@ -66,6 +67,22 @@ public class ChickenCoop : MonoBehaviour {
                     chicken.currentStatus = PlayerChicken.Status.Idle;
                 }
             }
+        }
+    }
+
+    private bool CheckChickenIdle(int chickenID) {
+        if(playerChickens[chickenID].currentStatus == PlayerChicken.Status.Idle) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private bool CheckChickenIdle(PlayerChicken chicken) {
+        if (chicken.currentStatus == PlayerChicken.Status.Idle) { 
+            return true;
+        } else {
+            return false;
         }
     }
 
