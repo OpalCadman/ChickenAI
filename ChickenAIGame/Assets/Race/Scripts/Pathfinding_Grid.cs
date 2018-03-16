@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding_Grid : MonoBehaviour {
-
+public class Pathfinding_Grid : MonoBehaviour
+{
     public LayerMask canWalkMask;
     public Vector2 G_worldSize;
     public float N_Radius;
@@ -37,10 +37,19 @@ public class Pathfinding_Grid : MonoBehaviour {
         }
     }
 
-    /*public Node WorldPointNode(Vector3 worldPos)
+    public Node WorldPointNode(Vector3 worldPos)
     {
-        float percX = (worldPos.x + G_worldSize.x / 2) / G_worldSize.x);
-    }*/
+        float percX = (worldPos.x + G_worldSize.x / 2) / G_worldSize.x;
+        float percY = (worldPos.z + G_worldSize.y / 2) / G_worldSize.y;
+
+        percX = Mathf.Clamp01(percX);
+        percY = Mathf.Clamp01(percY);
+
+        int x = Mathf.RoundToInt((gridX - 1) * percX);
+        int y = Mathf.RoundToInt((gridY - 1) * percY);
+        return grid[x, y];
+
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(G_worldSize.x, 1, G_worldSize.y));
