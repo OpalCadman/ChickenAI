@@ -9,10 +9,19 @@ public class Node
 {
     public bool canWalk;
     public Vector3 WorldPos;
+    public int G_Cost;
+    public int H_Cost;
 
     public Node(bool can_walk, Vector3 World_Pos)
     {
         canWalk = can_walk;
         WorldPos = World_Pos;
+    }
+
+    public int F_Cost
+    {
+        get {
+            return G_Cost + H_Cost;
+        }
     }
 }
