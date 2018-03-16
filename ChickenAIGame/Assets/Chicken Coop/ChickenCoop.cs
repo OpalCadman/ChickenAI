@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ChickenCoop : MonoBehaviour {
 
@@ -7,23 +8,116 @@ public class ChickenCoop : MonoBehaviour {
     //This just keeps track of how many chickens we have generated and is used when assigning the 
     //chickens a unique ID.
 
+    private DayManager dayManager = DayManager.Instance();
+    private CoopTraining training = CoopTraining.Instance();
+    private CoopBreeding breeding = CoopBreeding.Instance();
+    //Basically pointers or shortcuts to our other files rather than sticking everything in one file.
+
     public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
+    public Dictionary<int, BaseChicken> enemyChickensEasy = new Dictionary<int, BaseChicken>();
+    public Dictionary<int, BaseChicken> enemyChickensMedium = new Dictionary<int, BaseChicken>();
+    public Dictionary<int, BaseChicken> enemyChickensHard = new Dictionary<int, BaseChicken>();
 
     public void Start() {
         List<PlayerChicken> chickens = ChickenGenerator.genPChicken(6);
         //Generate the starting 6 chickens for the player.
         foreach (PlayerChicken chicken in chickens) {
+            chicken.uniqueID = chickenCount;
             playerChickens.Add(chickenCount, chicken);
-            chickenCount++;
+            chickenCount+=1;
             //Add the chickens to the map giving them a unique ID for when we need to retrieve data
             //from a specific chicken.
         }
-        Debug.Log("Chicken Count: " + chickenCount);
-        Debug.Log("Chicken 1 Strength: " + playerChickens[0].strengthStat);
-        Debug.Log("Chicken 2 Strength: " + playerChickens[1].strengthStat);
-        Debug.Log("Chicken 3 Strength: " + playerChickens[2].strengthStat);
-        Debug.Log("Chicken 4 Strength: " + playerChickens[3].strengthStat);
-        Debug.Log("Chicken 5 Strength: " + playerChickens[4].strengthStat);
-        Debug.Log("Chicken 6 Strength: " + playerChickens[5].strengthStat);
+
+        List<BaseChicken> eChickens = ChickenGenerator.genOpposingChicken(16, ChickenGenerator.StatTier.Easy);
+
+        foreach (BaseChicken chicken in eChickens) {
+            chicken.uniqueID = chickenCount;
+            enemyChickensEasy.Add(chickenCount, chicken);
+            chickenCount+=1;
+        }
+
+        List<BaseChicken> mChickens = ChickenGenerator.genOpposingChicken(16, ChickenGenerator.StatTier.Medium);
+
+        foreach (BaseChicken chicken in mChickens)
+        {
+            chicken.uniqueID = chickenCount;
+            enemyChickensMedium.Add(chickenCount, chicken);
+            chickenCount += 1;
+        }
+
+        List<BaseChicken> hChickens = ChickenGenerator.genOpposingChicken(16, ChickenGenerator.StatTier.Hard);
+
+        foreach (BaseChicken chicken in hChickens)
+        {
+            chicken.uniqueID = chickenCount;
+            enemyChickensHard.Add(chickenCount, chicken);
+            chickenCount += 1;
+        }
+    }
+
+    private void ChickenDecrement() {
+        foreach (PlayerChicken chicken in playerChickens.Values) {
+            chicken.ageInDays+=1;
+
+            if (chicken.daysLeftUntilActive != 0) {
+                chicken.daysLeftUntilActive -= 1;
+
+                if(chicken.daysLeftUntilActive == 0) {
+                    chicken.currentStatus = PlayerChicken.Status.Idle;
+                }
+            }
+        }
+    }
+
+    private bool CheckChickenIdle(int chickenID) {
+        if(playerChickens[chickenID].currentStatus == PlayerChicken.Status.Idle) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private bool CheckChickenIdle(PlayerChicken chicken) {
+        if (chicken.currentStatus == PlayerChicken.Status.Idle) { 
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int CalculatePercentile(int chickenID) {
+
+        Dictionary<int, int> allChickensStats = new Dictionary<int, int>();
+
+        foreach (PlayerChicken chicken in playerChickens.Values) {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        foreach (BaseChicken chicken in enemyChickensEasy.Values)
+        {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        foreach (BaseChicken chicken in enemyChickensMedium.Values)
+        {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        foreach (BaseChicken chicken in enemyChickensHard.Values)
+        {
+            int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
+            allChickensStats.Add(chicken.uniqueID, statTotal);
+        }
+
+        var sortedChickenStats = from statTotal in allChickensStats orderby statTotal.Value ascending select statTotal;
+
+        var sortedList = sortedChickenStats.ToList();
+        var index = sortedList.FindIndex(key => key.Key == chickenID);
+
+        return ((index + 1) * 100) / sortedList.Count;
     }
 }

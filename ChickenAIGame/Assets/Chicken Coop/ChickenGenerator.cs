@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 static public class ChickenGenerator {
 
-    private enum StatTier {
+    public enum StatTier {
         Player = 0,
         Easy = 1,
         Medium = 2,
@@ -34,6 +34,44 @@ static public class ChickenGenerator {
         return chickens;
     }
 
+    static public List<BaseChicken> genOpposingChicken(int noOfChickens, StatTier tier) {
+
+        List<BaseChicken> chickens = new List<BaseChicken>();
+
+        for (int i = 0; i < noOfChickens; i++)
+        {
+            BaseChicken chicken = new BaseChicken();
+
+            chicken.chickenName = "Test Dummy";
+
+            List<int> baseStats = new List<int> { 0, 0, 0, 0 };
+
+            switch (tier)
+            {
+                case StatTier.Easy:
+                    baseStats = genBaseStats(StatTier.Easy);
+                    break;
+                case StatTier.Medium:
+                    baseStats = genBaseStats(StatTier.Medium);
+                    break;
+                case StatTier.Hard:
+                    baseStats = genBaseStats(StatTier.Hard);
+                    break;
+            }
+            
+            chicken.strengthStat = baseStats[0];
+            chicken.dexterityStat = baseStats[1];
+            chicken.intelligenceStat = baseStats[2];
+            chicken.enduranceStat = baseStats[3];
+
+            chicken.ageInDays = Random.Range(7, 29);
+
+            chickens.Add(chicken);
+        }
+
+        return chickens;
+    }
+
     static private List<int> genBaseStats(StatTier statTier) {
         //This is just the method of generating the base stats for a chicken. If you have a more elaborate method
         //be my guest, all the numbers are just arbitrary since I have no idea how we are going to turn these numbers
@@ -44,7 +82,7 @@ static public class ChickenGenerator {
         switch (statTier) {
             case StatTier.Player:
                 for(int i = 0; i < 4; i++) {
-                    int statValue = Random.Range(0, 16);
+                    int statValue = Random.Range(0, 12);
                     stats.Add(statValue);
                 }
                
@@ -52,21 +90,21 @@ static public class ChickenGenerator {
 
             case StatTier.Easy:
                 for (int i = 0; i < 4; i++) {
-                    int statValue = Random.Range(0, 26);
+                    int statValue = Random.Range(0, 16);
                     stats.Add(statValue);
                 }
                 break;
 
             case StatTier.Medium:
                 for (int i = 0; i < 4; i++) {
-                    int statValue = Random.Range(23, 56);
+                    int statValue = Random.Range(8, 26);
                     stats.Add(statValue);
                 }
                 break;
 
             case StatTier.Hard:
                 for (int i = 0; i < 4; i++) {
-                    int statValue = Random.Range(44, 76);
+                    int statValue = Random.Range(16, 36);
                     stats.Add(statValue);
                 }
                 break;

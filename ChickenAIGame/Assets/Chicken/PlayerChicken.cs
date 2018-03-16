@@ -2,6 +2,16 @@
 
 public class PlayerChicken : BaseChicken {
 
+    public struct BreedingBonus {
+        //Whenever a chicken trains it gains a breeding bonus of 0.1 in that stat. Training another stat will remove the bonus
+        //and give a bonus in the newly trained stat instead. If the chicken trains the same stat multiple times the value will keep
+        //increasing by 0.1. This value is used when calculating the stats passed down whilst breeding. The value will increase
+        //the chance of passing down the corresponding stat.
+        public CoopTraining.TrainingType stat;
+        public int value;
+        public BreedingBonus(CoopTraining.TrainingType statParameter, int valueParameter) { stat = statParameter; value = valueParameter; } //Initialisation lists don't exist in C#.
+    }
+
     public enum Perk {
         //Here is where we will list all the perks the chickens can get, think of this as more 
         //a declaration of the perk names, the definitions will be wherever the perk is relevant.
@@ -27,7 +37,8 @@ public class PlayerChicken : BaseChicken {
         Idle = 0,
         Training = 1,
         Breeding = 2,
-        Racing = 3
+        Racing = 3,
+        Egg = 4 // Chickens are created at the beginning of the breeding phase but only become available to use at the end.
     };
 
     public int enduranceCurrent;
@@ -35,9 +46,13 @@ public class PlayerChicken : BaseChicken {
     //so we know when a chicken is able to train or not. This value could also be used during the races, the 
     //lower their endurance is the worse they will perform.
     public Status currentStatus = Status.Idle;
+    public int daysLeftUntilActive;
     private List<ChickenPerk> perkList = new List<ChickenPerk>();
 
-    private float breedingPotency;
+    public float breedingPotency;
     //Similar to racingPotency from BaseChicken.cs, not sure on calculations yet but it would help determine
     //the result of the chicken breeding.
+    public BreedingBonus breedingBonus = new BreedingBonus(CoopTraining.TrainingType.All, 0);
+    //Well this is a lot messier than I had hoped. The breeding bonus here would just be a propety of all player chickens so it
+    //it easily accessible from the CoopBreeding.cs where it is required to calclate the offspring.
 }
