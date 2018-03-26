@@ -9,11 +9,15 @@ public class RequestPathManager : MonoBehaviour
     RequestPath currentRequestPath;
 
     static RequestPathManager instance;
+    Pathfinding path_finding;
+
+    bool pathisProcessing;
 
 
     void Awake()
     {
-        instance = this;   
+        instance = this;
+        path_finding = GetComponent<Pathfinding>();
     }
     public static void Path_Request(Vector3 Start_Path, Vector3 End_Path, Action<Vector3[], bool> waitingTime)
     {
@@ -22,16 +26,28 @@ public class RequestPathManager : MonoBehaviour
         instance.TryNextProcess();
     }
 
+    public void processingFinished(Vector3[] path, bool success)
+    {
+        currentRequestPath.waitingTime(path, success);
+        pathisProcessing = false;
+        TryNextProcess();
+    }
+
     void TryNextProcess()
     {
-        /*5:51 Units episode 6*/
+        if (!pathisProcessing && QueueRequestPath.Count > 0)
+        {
+            currentRequestPath = QueueRequestPath.Dequeue();
+            pathisProcessing = true;
+            path_finding.StartFindPath(currentRequestPath.startPath, currentRequestPath.endPath);
+        }
     }
 
     struct RequestPath
     {
         public Vector3 startPath;
         public Vector3 endPath;
-        Action<Vector3[], bool> waitingTime;
+        public Action<Vector3[], bool> waitingTime;
 
         public RequestPath(Vector3 _startPath, Vector3 _endPath, Action<Vector3[], bool> _waitingTime)
         {

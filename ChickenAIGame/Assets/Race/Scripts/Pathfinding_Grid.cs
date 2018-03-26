@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Pathfinding_Grid : MonoBehaviour
 {
+    public bool DisplayGridGizmos;
     public LayerMask canWalkMask;
     public Vector2 G_worldSize;
     public float N_Radius;
@@ -13,7 +14,7 @@ public class Pathfinding_Grid : MonoBehaviour
     int gridX;
     int gridY;
 
-    void Start()
+    void Awake()
     {
         Diameter_Node = N_Radius * 2;
         gridX = Mathf.RoundToInt(G_worldSize.x / Diameter_Node);
@@ -84,24 +85,15 @@ public class Pathfinding_Grid : MonoBehaviour
 
     }
 
-    public List<Node> path;
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(G_worldSize.x, 1, G_worldSize.y));
 
-        if (grid != null)
+        if (grid != null && DisplayGridGizmos)
         {
             foreach (Node n in grid)
             {
                 Gizmos.color = (n.canWalk) ? Color.white : Color.red;
-                if (path != null)
-                {
-                    if(path.Contains(n))
-                    {
-                        Gizmos.color = Color.black;
-                    }
-                }
                 Gizmos.DrawCube(n.WorldPos, Vector3.one * (Diameter_Node - 0.1f));
             }
         }
