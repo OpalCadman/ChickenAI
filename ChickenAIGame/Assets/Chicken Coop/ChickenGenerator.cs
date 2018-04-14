@@ -20,7 +20,7 @@ static public class ChickenGenerator {
         for (int i = 0; i < noOfChickens; i++) {
             PlayerChicken chicken = new PlayerChicken();
 
-            chicken.chickenName = "Test Dummy";
+            chicken.chickenName = "Test Chicken";
 
             List<int> baseStats = genBaseStats(StatTier.Player);
             chicken.strengthStat = baseStats[0];
@@ -32,6 +32,19 @@ static public class ChickenGenerator {
         }
 
         return chickens;
+    }
+
+    static public PlayerChicken genSetChicken(int[] stats) {
+        PlayerChicken chicken = new PlayerChicken();
+
+        chicken.chickenName = "Test Chicken";
+
+        chicken.strengthStat = stats[0];
+        chicken.dexterityStat = stats[1];
+        chicken.intelligenceStat = stats[2];
+        chicken.enduranceStat = stats[3];
+
+        return chicken;
     }
 
     static public List<BaseChicken> genOpposingChicken(int noOfChickens, StatTier tier) {

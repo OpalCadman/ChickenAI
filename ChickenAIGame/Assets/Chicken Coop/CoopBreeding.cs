@@ -1,34 +1,31 @@
-﻿
+﻿using UnityEngine;
+
 public class CoopBreeding {
 
-    private int baseStr = 1;
-    private int baseDex = 1;
-    private int baseInt = 1;
-    private int baseEnd = 1;
+    private int baseStr = 10;
+    private int baseDex = 10;
+    private int baseInt = 10;
+    private int baseEnd = 10;
     //These are the base chances of passing down each stat. Since they are all equal and there are 4 of them there would be a 25% chance of landing on any one.
 
-    public void AssignChickens(PlayerChicken chickenA, PlayerChicken chickenB) {
+    public int[] AssignChickens(PlayerChicken chickenA, PlayerChicken chickenB) {
         chickenA.currentStatus = PlayerChicken.Status.Breeding;
         chickenB.currentStatus = PlayerChicken.Status.Breeding;
         chickenA.daysLeftUntilActive = 3;
         chickenB.daysLeftUntilActive = 3;
 
-        bool strPassed = false;
-        bool dexPassed = false;
-        bool intPassed = false;
-        bool endPassed = false;
-
-        //More temp variables, these track which stats have been passed down already to prevent both chickens trying to pass down the same stat.
-
+        
         int strChanceA = baseStr;
         int dexChanceA = baseDex;
         int intChanceA = baseInt;
         int endChanceA = baseEnd;
+        
 
         int strChanceB = baseStr;
         int dexChanceB = baseDex;
         int intChanceB = baseInt;
         int endChanceB = baseEnd;
+        
 
         //Creating temporary variables since we want to apply modifiers to the value, but we don't want to alter the base values.
 
@@ -74,8 +71,16 @@ public class CoopBreeding {
         //causes 3 to be passed down from one chicken. To do that we would just check both chickens for a modifer that alters this, if one is found then we make the 
         //suitable changes to these values.
 
-        int statsPassedFromA = 2;
+        int statsPassedFromA = 2;   //For now just leave these as 2 as the stat inheriting algorithm doesn't work if the chicken with the higher breeding potentcy passes down less stats than the other.
         int statsPassedFromB = 2;
+
+        //Arrays to store the chances of each stat for both chickens
+
+        int[] chickenAProbability = new int[] { strChanceA, dexChanceA, intChanceA, endChanceA };
+        int[] chickenBProbability = new int[] { strChanceB, dexChanceB, intChanceB, endChanceB };
+        int[] chickenAStats = new int[] { chickenA.strengthStat, chickenA.dexterityStat, chickenA.intelligenceStat, chickenA.enduranceStat };
+        int[] chickenBStats = new int[] { chickenB.strengthStat, chickenB.dexterityStat, chickenB.intelligenceStat, chickenB.enduranceStat };
+        int[] newChickenStats = new int[4];
 
         //Then we need to check which chicken has the highest breeding proficiency, this determines who we will select the first stat from. If they are equal then we just 
         //use chickenA.
@@ -86,16 +91,121 @@ public class CoopBreeding {
             while(statsPassedFromB != 0) {
                 statsPassedFromB -= 1;
 
-                int total = strChanceB + dexChanceB + intChanceB + endChanceB;
-                //To find which stat we pass down we need to add up all the chanceB's to get a value such as 4. Then you generate a random number between 0 and 4, say we get 3. Then
-                //I forgot the next part but I have done it before in previous work so I can just check the rest of the algorithm there. However the difference here is that we need to 
-                //remove the chance of getting a stat that has already been gotten, so after a stat has been selected we will need to minus that chancevalue from the total.
+                int totalB = 0;
+                foreach(int value in chickenBProbability) {
+                    //Here we are adding the probability of landing on each stat together to reach a total, this value is used when determining which stat we have landed on.
+                    totalB += value;
+                }
 
+                int randomNoB = Random.Range(0, totalB);
+                int trackingNoB = 0;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    //To figure out which stat we have landed on we generate a random number between 0 and the total probability, we then go through all the values in the array adding them
+                    //to the tracking number. After each value is added we check to see if the tracking number has exceeded the random number. If it has then that is the stat we have randomly selected.
+                    //You can imagine it as a pie chart where an item with a probability of 10 has it's own chunk that consists of the numbers 0-9. Then another item with a probability 5 would have the numbers
+                    //10-14 and so on. This algorithm just makes it so the probability of all the items doesn't need to add up to 100%.
+                    trackingNoB += chickenBProbability[i];
+                    if(randomNoB <= trackingNoB)
+                    {
+                        //Once we find the value we have landed on we want to copy that over into the new chicken, and set the values of the breeding chicken to 0 so that they won't be chosen again.
+                        newChickenStats[i] = chickenBStats[i];
+                        chickenAProbability[i] = 0;
+                        chickenBProbability[i] = 0;
+                        break;
+                    }
+                }
+                //After copying one of the stats from one parent we now need to copy a stat from the other parent. However this time one of the stats will be removed from the pool since
+                //we can't have the parents passing down the same stats as that would overwrite one stat whilst leaving another null.
                 while(statsPassedFromA != 0) {
                     statsPassedFromA -= 1;
+
+                    int totalA = 0;
+                    foreach (int value in chickenAProbability) {
+                        totalA += value;
+                    }
+
+                    int randomNoA = Random.Range(0, totalA);
+                    int trackingNoA = 0;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        trackingNoA += chickenAProbability[i];
+                        if (randomNoA <= trackingNoA)
+                        {
+                            newChickenStats[i] = chickenAStats[i];
+                            chickenAProbability[i] = 0;
+                            chickenBProbability[i] = 0;
+                            break;
+                        }
+                    }
+                    break;
                 }
             }
         }
+        else {
+            //This is just the same thing again except we inherit from chickenA first rather than chickenB. 
+            while (statsPassedFromA != 0)
+            {
+                statsPassedFromA -= 1;
+
+                int totalA = 0;
+                foreach (int value in chickenAProbability)
+                {
+                    totalA += value;
+                }
+
+                int randomNoA = Random.Range(0, totalA);
+                int trackingNoA = 0;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    trackingNoA += chickenAProbability[i];
+                    if (randomNoA <= trackingNoA)
+                    {
+                        newChickenStats[i] = chickenAStats[i];
+                        chickenAProbability[i] = 0;
+                        chickenBProbability[i] = 0;
+                        break;
+                    }
+                }
+
+                while (statsPassedFromB != 0)
+                {
+                    statsPassedFromB -= 1;
+
+                    int totalB = 0;
+                    foreach (int value in chickenBProbability)
+                    {
+
+                        totalB += value;
+                    }
+
+                    int randomNoB = Random.Range(0, totalB);
+                    int trackingNoB = 0;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+
+                        trackingNoB += chickenBProbability[i];
+                        if (randomNoB <= trackingNoB)
+                        {
+                            newChickenStats[i] = chickenBStats[i];
+                            chickenAProbability[i] = 0;
+                            chickenBProbability[i] = 0;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        Debug.Log("Str: " + newChickenStats[0]);
+        Debug.Log("Dex: " + newChickenStats[1]);
+        Debug.Log("Int: " + newChickenStats[2]);
+        Debug.Log("End: " + newChickenStats[3]);
+        return newChickenStats;
     }
 
     static public CoopBreeding Instance() { return breeding; }
