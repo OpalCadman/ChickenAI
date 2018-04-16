@@ -49,7 +49,7 @@ public class PlayerChicken : BaseChicken {
     public int daysLeftUntilActive;
     private List<ChickenPerk> perkList = new List<ChickenPerk>();
 
-    public float breedingPotency;
+    public float breedingPotency = 10;
     //Similar to racingPotency from BaseChicken.cs, not sure on calculations yet but it would help determine
     //the result of the chicken breeding.
     public BreedingBonus breedingBonus = new BreedingBonus(CoopTraining.TrainingType.All, 0);

@@ -113,6 +113,11 @@ public class CoopBreeding {
                         newChickenStats[i] = chickenBStats[i];
                         chickenAProbability[i] = 0;
                         chickenBProbability[i] = 0;
+
+                        if(Random.Range(0,100) < 5) {
+                            //This is a simple mutation, we have a 5% chance of the stat being mutated, if it is then we just select a random number between 0 and 25.
+                            newChickenStats[i] = Random.Range(0, 25);
+                        }
                         break;
                     }
                 }
@@ -137,6 +142,10 @@ public class CoopBreeding {
                             newChickenStats[i] = chickenAStats[i];
                             chickenAProbability[i] = 0;
                             chickenBProbability[i] = 0;
+
+                            if (Random.Range(0, 100) < 5) {
+                                newChickenStats[i] = Random.Range(0, 25);
+                            }
                             break;
                         }
                     }
@@ -167,6 +176,10 @@ public class CoopBreeding {
                         newChickenStats[i] = chickenAStats[i];
                         chickenAProbability[i] = 0;
                         chickenBProbability[i] = 0;
+
+                        if (Random.Range(0, 100) < 5) {
+                            newChickenStats[i] = Random.Range(0, 25);
+                        }
                         break;
                     }
                 }
@@ -194,6 +207,10 @@ public class CoopBreeding {
                             newChickenStats[i] = chickenBStats[i];
                             chickenAProbability[i] = 0;
                             chickenBProbability[i] = 0;
+
+                            if (Random.Range(0, 100) < 5) {
+                                newChickenStats[i] = Random.Range(0, 25);
+                            }
                             break;
                         }
                     }
@@ -205,6 +222,10 @@ public class CoopBreeding {
         Debug.Log("Dex: " + newChickenStats[1]);
         Debug.Log("Int: " + newChickenStats[2]);
         Debug.Log("End: " + newChickenStats[3]);
+
+        chickenA.breedingPotency += 0.5f;
+        chickenB.breedingPotency += 0.5f;
+
         return newChickenStats;
     }
 
