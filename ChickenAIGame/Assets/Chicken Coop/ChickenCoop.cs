@@ -4,6 +4,8 @@ using System.Linq;
 
 public class ChickenCoop : MonoBehaviour {
 
+    public GameObject trainingButton;
+
     private int chickenCount = 0;
     //This just keeps track of how many chickens we have generated and is used when assigning the 
     //chickens a unique ID.
@@ -55,12 +57,20 @@ public class ChickenCoop : MonoBehaviour {
             chickenCount += 1;
         }
 
+        trainingButton = FindObjectOfType<GameObject>();
+        trainingButton.SetActive(true);
+
         //Testing breeding, the AssignChickens function takes 2 chickens and passes down their stats into an array. We then pass that array of stats into the chicken generator to create a new chicken. 
         int[] newChickenStats = breeding.AssignChickens(playerChickens[0], playerChickens[1]);
         PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
         babyChicken.uniqueID = chickenCount;
         playerChickens.Add(chickenCount, babyChicken);
         chickenCount += 1;
+    }
+
+    public void Update()
+    {
+        
     }
 
     private void ChickenDecrement() {

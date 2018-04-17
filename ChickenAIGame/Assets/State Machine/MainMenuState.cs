@@ -1,7 +1,7 @@
-﻿
-public class MainMenuState : GameState {
-
-    override public void Initialise() {
+﻿using UnityEngine;
+public class MainMenuState : GameState
+{
+    override public void Initialise(GameObject canvas) {
         UnityEngine.Debug.Log("[Main Menu] Active");
     }
     override public void CleanUp() {

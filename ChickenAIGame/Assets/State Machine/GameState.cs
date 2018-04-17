@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine.UI;
+using UnityEngine;
 public abstract class GameState {
     //This is the generic game state class that all game states will inherit from.
     //Each game state will be quite different but the following public functions
@@ -6,7 +7,7 @@ public abstract class GameState {
 
     //For more information and an example on creating states check TitleScreenState.cs
 
-    public abstract void Initialise();
+    public abstract void Initialise(GameObject canvas);
     public abstract void CleanUp();
     public abstract void Pause();
     public abstract void Resume();

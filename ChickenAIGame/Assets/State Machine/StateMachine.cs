@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class StateMachine : MonoBehaviour {
+
+    public GameObject canvas;
     //This is the state machine that controls which state is currently active
     //whilst the game is running. It uses a stack structure so whenever we move to
     //the next state we are just pushing it onto the stack, if we want to leave the
@@ -40,7 +42,7 @@ public class StateMachine : MonoBehaviour {
         }
 
         states.Add(state);
-        states.Last().Initialise();
+        states.Last().Initialise(canvas);
     }
     public void PopState() {
         //Starts by checking if there is a state on the stack to pop off, if there is

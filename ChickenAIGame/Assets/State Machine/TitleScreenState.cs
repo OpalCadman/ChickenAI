@@ -1,14 +1,25 @@
-﻿
+﻿using UnityEngine.UI;
+using UnityEngine;
+
 public class TitleScreenState : GameState {
+    GameObject TextObj = new GameObject();
+    
     //This is the title screen state to be used by the state machine. Any additional 
     //states that you want to create will need the functions/variables seen in this 
     //class.
 
-    override public void Initialise() {
+    override public void Initialise(GameObject canvas) {
         //This function is called when you initially push the state onto the stack.
         //So anything that you want to happen when the states first becomes active
         //should be placed here. Mostly assigning variables/calling functions etc.
         UnityEngine.Debug.Log("[Title Screen] Active");
+        Font arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        TextObj.name = "IntroText";
+        TextObj.AddComponent<Text>();
+        TextObj.GetComponent<Text>().text = "Press any button to start";
+        TextObj.GetComponent<Text>().font = arial;
+        TextObj.transform.SetParent(canvas.transform);
+        TextObj.GetComponent<Text>().rectTransform.localPosition = new Vector3(0, 0, 0);
     }
     override public void CleanUp() {
         //This function is called when when we pop this state off from the stack.
@@ -24,6 +35,7 @@ public class TitleScreenState : GameState {
         //later, and we want it to either pick up where it left off or reset back to
         //default values.
         UnityEngine.Debug.Log("[Title Screen] Paused");
+        TextObj.SetActive(false);
     }
     override public void Resume() {
         //If this state is in the stack but not currently active, once we pop off enough
@@ -40,7 +52,7 @@ public class TitleScreenState : GameState {
         //getting events from Unity show tell me if you know how to do it properly.
         if (UnityEngine.Input.anyKeyDown) {
             UnityEngine.Debug.Log("[Title Screen] Entering Main Menu");
-            stateMachine.PushState(MainMenuState.Instance());
+            stateMachine.PushState(CoopState.Instance());
         }
         //This is an example of creating a new state from an already existing state.
         //This is also seen in the StateController, however this just shows that you

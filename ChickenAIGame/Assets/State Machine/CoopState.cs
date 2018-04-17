@@ -1,7 +1,7 @@
-﻿
+﻿using UnityEngine;
 public class CoopState : GameState {
 
-    override public void Initialise() {
+    override public void Initialise(GameObject canvas) {
         UnityEngine.Debug.Log("[Coop] Active");
 
         var emptyGO = new UnityEngine.GameObject();
@@ -18,8 +18,9 @@ public class CoopState : GameState {
         UnityEngine.Debug.Log("[Coop] Resumed");
     }
     override public void HandleEvents(StateMachine stateMachine) {
-        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Escape)) {
-            UnityEngine.Debug.Log("[Coop] Exiting Main Menu");
+        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Escape))
+        {
+            UnityEngine.Debug.Log("[Coop] Exiting to Title Screen");
             stateMachine.PopState();
         }
     }
