@@ -84,9 +84,10 @@ public class StateMachine : MonoBehaviour {
 
     private bool isRunning;
     private List<GameState> states = new List<GameState>();
-    
+
     //This list keeps track of all the game states on the stack. Each time you
     //push a state onto the state machine it is added to the list, everytime
     //you pop a state, the last state in the list is removed. The last state
     //in the list is the active state, all states before that are paused.
+
 }

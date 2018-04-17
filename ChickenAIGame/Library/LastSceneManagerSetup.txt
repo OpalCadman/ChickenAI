@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Race/Race.unity
+- path: Assets/Decision Making/Decision.unity
   isLoaded: 1
   isActive: 1
