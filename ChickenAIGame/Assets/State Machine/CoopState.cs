@@ -10,6 +10,8 @@ public class CoopState : GameState {
     }
     override public void CleanUp() {
         UnityEngine.Debug.Log("[Coop] Cleaning Up");
+
+        GameObject.Find("Chicken Coop").GetComponent<ChickenCoop>().CleanUp();
     }
     override public void Pause() {
         UnityEngine.Debug.Log("[Coop] Paused");

@@ -44,6 +44,7 @@ public class TitleScreenState : GameState {
         //it is a menu and you want to reset the button they last had highlighted,
         //or maybe you want to keep the last tab they had open in the menu etc.
         UnityEngine.Debug.Log("[Title Screen] Resumed");
+        TextObj.SetActive(true);
     }
     override public void HandleEvents(StateMachine stateMachine) {
         //Here is where you would place most keyboard/mouse events etc. This is called 

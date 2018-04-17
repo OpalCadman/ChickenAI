@@ -4,7 +4,7 @@ using System.Linq;
 
 public class ChickenCoop : MonoBehaviour {
 
-    public GameObject trainingButton;
+    private ButtonManager buttonManagerRef;
 
     private int chickenCount = 0;
     //This just keeps track of how many chickens we have generated and is used when assigning the 
@@ -57,15 +57,10 @@ public class ChickenCoop : MonoBehaviour {
             chickenCount += 1;
         }
 
-        trainingButton = FindObjectOfType<GameObject>();
-        trainingButton.SetActive(true);
-
-        //Testing breeding, the AssignChickens function takes 2 chickens and passes down their stats into an array. We then pass that array of stats into the chicken generator to create a new chicken. 
-        int[] newChickenStats = breeding.AssignChickens(playerChickens[0], playerChickens[1]);
-        PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
-        babyChicken.uniqueID = chickenCount;
-        playerChickens.Add(chickenCount, babyChicken);
-        chickenCount += 1;
+        GameObject temp = GameObject.Find("ButtonManager");
+        buttonManagerRef = temp.GetComponent<ButtonManager>();
+        buttonManagerRef.Initialise();
+        buttonManagerRef.ActivateButtons();
     }
 
     public void Update()
@@ -73,7 +68,13 @@ public class ChickenCoop : MonoBehaviour {
         
     }
 
-    private void ChickenDecrement() {
+    public void CleanUp()
+    {
+        buttonManagerRef.DeactivateButtons();
+    }
+
+    public void ChickenDecrement() {
+        dayManager.AdvanceDay();
         foreach (PlayerChicken chicken in playerChickens.Values) {
             chicken.ageInDays+=1;
 
@@ -85,6 +86,15 @@ public class ChickenCoop : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void BreedChickens()
+    {
+        int[] newChickenStats = breeding.AssignChickens(playerChickens[0], playerChickens[1]);
+        PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
+        babyChicken.uniqueID = chickenCount;
+        playerChickens.Add(chickenCount, babyChicken);
+        chickenCount += 1;
     }
 
     private bool CheckChickenIdle(int chickenID) {

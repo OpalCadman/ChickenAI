@@ -218,10 +218,6 @@ public class CoopBreeding {
                 }
             }
         }
-        Debug.Log("Str: " + newChickenStats[0]);
-        Debug.Log("Dex: " + newChickenStats[1]);
-        Debug.Log("Int: " + newChickenStats[2]);
-        Debug.Log("End: " + newChickenStats[3]);
 
         chickenA.breedingPotency += 0.5f;
         chickenB.breedingPotency += 0.5f;

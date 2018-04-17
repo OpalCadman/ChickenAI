@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections.Generic;
+using UnityEngine;
+
 public class CoopTraining {
 
     public enum TrainingType {
@@ -42,6 +44,42 @@ public class CoopTraining {
                 chicken.dexterityStat+=1;
                 chicken.intelligenceStat+=1;
                 break;
+        }
+    }
+
+    public void TrainChickens(Dictionary<int, PlayerChicken> allChickens)
+    {
+        foreach (var chicken in allChickens)
+        {
+            chicken.Value.currentStatus = PlayerChicken.Status.Training;
+            chicken.Value.daysLeftUntilActive = 3;
+            chicken.Value.breedingPotency -= 0.2f;
+
+            int rnd = Random.Range(0, 4);
+
+            switch (rnd)
+            {
+                case 0:
+                    chicken.Value.strengthStat += 3;
+                    chicken.Value.intelligenceStat -= 1;
+                    break;
+                case 1:
+                    chicken.Value.dexterityStat += 3;
+                    chicken.Value.strengthStat -= 1;
+                    break;
+                case 2:
+                    chicken.Value.intelligenceStat += 3;
+                    chicken.Value.dexterityStat -= 1;
+                    break;
+                case 3:
+                    chicken.Value.enduranceStat += 2;
+                    break;
+                case 4:
+                    chicken.Value.strengthStat += 1;
+                    chicken.Value.dexterityStat += 1;
+                    chicken.Value.intelligenceStat += 1;
+                    break;
+            }
         }
     }
 
