@@ -15,6 +15,8 @@ public class CoopTraining {
         chicken.daysLeftUntilActive = 2;
         //At the end of each day we loop through all chickens decrementing this value by one.
 
+        chicken.breedingPotency -= 0.2f;
+
         switch (type) {
             case TrainingType.Str:
                 chicken.strengthStat += 3;

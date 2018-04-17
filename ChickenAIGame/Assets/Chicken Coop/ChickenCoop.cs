@@ -54,6 +54,13 @@ public class ChickenCoop : MonoBehaviour {
             enemyChickensHard.Add(chickenCount, chicken);
             chickenCount += 1;
         }
+
+        //Testing breeding, the AssignChickens function takes 2 chickens and passes down their stats into an array. We then pass that array of stats into the chicken generator to create a new chicken. 
+        int[] newChickenStats = breeding.AssignChickens(playerChickens[0], playerChickens[1]);
+        PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
+        babyChicken.uniqueID = chickenCount;
+        playerChickens.Add(chickenCount, babyChicken);
+        chickenCount += 1;
     }
 
     private void ChickenDecrement() {
