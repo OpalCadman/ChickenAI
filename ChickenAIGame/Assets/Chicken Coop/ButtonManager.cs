@@ -11,6 +11,7 @@ public class ButtonManager : MonoBehaviour {
     public GameObject dayCounter;
     public GameObject advanceDay;
     public GameObject raceButton;
+    public GameObject race;
 
     private ChickenCoop chickenCoopRef;
     private CoopTraining training = CoopTraining.Instance();
@@ -150,6 +151,7 @@ public class ButtonManager : MonoBehaviour {
 
     public void RaceButton()
     {
+        Instantiate(race);
         List<PlayerChicken> selectedChickens = chickenCoopRef.SelectChickens();
         GameObject[] actualChickens = GameObject.FindGameObjectsWithTag("Chicken");
 

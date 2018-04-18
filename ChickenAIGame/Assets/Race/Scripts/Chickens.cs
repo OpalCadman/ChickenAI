@@ -5,9 +5,11 @@ using UnityEngine;
 public class Chickens : MonoBehaviour
 {
     public Transform target;
+    public GameObject race;
     float speed = 10f;
     Vector3[] path;
     int target_index;
+    public bool reset = false;
 
     private void Start()
     {
@@ -67,4 +69,11 @@ public class Chickens : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Finish")
+        {
+            reset = true;
+        }
+    }
 }
