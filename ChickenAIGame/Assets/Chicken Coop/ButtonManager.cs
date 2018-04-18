@@ -150,6 +150,20 @@ public class ButtonManager : MonoBehaviour {
 
     public void RaceButton()
     {
+        List<PlayerChicken> selectedChickens = chickenCoopRef.SelectChickens();
+        GameObject[] actualChickens = GameObject.FindGameObjectsWithTag("Chicken");
+
+        for(int i = 0; i < 3; i++)
+        {
+            actualChickens[i].AddComponent<ActualPlayerChicken>();
+            actualChickens[i].GetComponent<ActualPlayerChicken>().chickenName = selectedChickens[i].chickenName;
+            actualChickens[i].GetComponent<ActualPlayerChicken>().strength = selectedChickens[i].strengthStat;
+            actualChickens[i].GetComponent<ActualPlayerChicken>().dexterity = selectedChickens[i].dexterityStat;
+            actualChickens[i].GetComponent<ActualPlayerChicken>().intelligence = selectedChickens[i].intelligenceStat;
+            actualChickens[i].GetComponent<ActualPlayerChicken>().endurance = selectedChickens[i].enduranceStat;
+
+        }
+
         chickenCoopRef.ChickenDecrement();
         dayCounter.GetComponent<Text>().text = "Day: " + dayManager.currentDay
                                                + "\nDays Past: " + dayManager.noOfDaysPast;

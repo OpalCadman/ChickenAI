@@ -67,11 +67,6 @@ public class ChickenCoop : MonoBehaviour {
         buttonManagerRef.coopAlive = true;
     }
 
-    public void Update()
-    {
-        
-    }
-
     public void CleanUp()
     {
         buttonManagerRef.DeactivateButtons();
@@ -94,7 +89,6 @@ public class ChickenCoop : MonoBehaviour {
 
     public void BreedChickens()
     { 
-
         List<PlayerChicken> newChickens = new List<PlayerChicken>();
         int chickenIndex = 0;
         for (int i = 0; i < 9; i++)
@@ -120,6 +114,19 @@ public class ChickenCoop : MonoBehaviour {
             playerChickens.Add(newChickens[newChickens.Count - 1]);
             newChickens.RemoveAt(newChickens.Count - 1);
         }
+    }
+
+    public List<PlayerChicken> SelectChickens()
+    {
+        List<PlayerChicken> selectedChickens = new List<PlayerChicken>();
+
+        for(int i = 0; i < 3; i++)
+        {
+            int chickenIndex = Random.Range(0, playerChickens.Count);
+            selectedChickens.Add(playerChickens[chickenIndex]);
+        }
+        
+        return selectedChickens;
     }
 
     private bool CheckChickenIdle(int chickenID) {
