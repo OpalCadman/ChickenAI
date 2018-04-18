@@ -47,37 +47,37 @@ public class CoopTraining {
         }
     }
 
-    public void TrainChickens(Dictionary<int, PlayerChicken> allChickens)
+    public void TrainChickens(List<PlayerChicken> allChickens)
     {
         foreach (var chicken in allChickens)
         {
-            chicken.Value.currentStatus = PlayerChicken.Status.Training;
-            chicken.Value.daysLeftUntilActive = 3;
-            chicken.Value.breedingPotency -= 0.2f;
+            chicken.currentStatus = PlayerChicken.Status.Training;
+            chicken.daysLeftUntilActive = 3;
+            chicken.breedingPotency -= 0.2f;
 
             int rnd = Random.Range(0, 4);
 
             switch (rnd)
             {
                 case 0:
-                    chicken.Value.strengthStat += 3;
-                    chicken.Value.intelligenceStat -= 1;
+                    chicken.strengthStat += 3;
+                    chicken.intelligenceStat -= 1;
                     break;
                 case 1:
-                    chicken.Value.dexterityStat += 3;
-                    chicken.Value.strengthStat -= 1;
+                    chicken.dexterityStat += 3;
+                    chicken.strengthStat -= 1;
                     break;
                 case 2:
-                    chicken.Value.intelligenceStat += 3;
-                    chicken.Value.dexterityStat -= 1;
+                    chicken.intelligenceStat += 3;
+                    chicken.dexterityStat -= 1;
                     break;
                 case 3:
-                    chicken.Value.enduranceStat += 2;
+                    chicken.enduranceStat += 2;
                     break;
                 case 4:
-                    chicken.Value.strengthStat += 1;
-                    chicken.Value.dexterityStat += 1;
-                    chicken.Value.intelligenceStat += 1;
+                    chicken.strengthStat += 1;
+                    chicken.dexterityStat += 1;
+                    chicken.intelligenceStat += 1;
                     break;
             }
         }

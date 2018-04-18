@@ -15,17 +15,19 @@ public class ChickenCoop : MonoBehaviour {
     private CoopBreeding breeding = CoopBreeding.Instance();
     //Basically pointers or shortcuts to our other files rather than sticking everything in one file.
 
-    public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
+    //public Dictionary<int, PlayerChicken> playerChickens = new Dictionary<int, PlayerChicken>();
     public Dictionary<int, BaseChicken> enemyChickensEasy = new Dictionary<int, BaseChicken>();
     public Dictionary<int, BaseChicken> enemyChickensMedium = new Dictionary<int, BaseChicken>();
     public Dictionary<int, BaseChicken> enemyChickensHard = new Dictionary<int, BaseChicken>();
+
+    public List<PlayerChicken> playerChickens = new List<PlayerChicken>();
 
     public void Start() {
         List<PlayerChicken> chickens = ChickenGenerator.genPChicken(6);
         //Generate the starting 6 chickens for the player.
         foreach (PlayerChicken chicken in chickens) {
             chicken.uniqueID = chickenCount;
-            playerChickens.Add(chickenCount, chicken);
+            playerChickens.Add(chicken);
             chickenCount+=1;
             //Add the chickens to the map giving them a unique ID for when we need to retrieve data
             //from a specific chicken.
@@ -61,6 +63,8 @@ public class ChickenCoop : MonoBehaviour {
         buttonManagerRef = temp.GetComponent<ButtonManager>();
         buttonManagerRef.Initialise();
         buttonManagerRef.ActivateButtons();
+
+        buttonManagerRef.coopAlive = true;
     }
 
     public void Update()
@@ -75,7 +79,7 @@ public class ChickenCoop : MonoBehaviour {
 
     public void ChickenDecrement() {
         dayManager.AdvanceDay();
-        foreach (PlayerChicken chicken in playerChickens.Values) {
+        foreach (PlayerChicken chicken in playerChickens) {
             chicken.ageInDays+=1;
 
             if (chicken.daysLeftUntilActive != 0) {
@@ -89,12 +93,33 @@ public class ChickenCoop : MonoBehaviour {
     }
 
     public void BreedChickens()
-    {
-        int[] newChickenStats = breeding.AssignChickens(playerChickens[0], playerChickens[1]);
-        PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
-        babyChicken.uniqueID = chickenCount;
-        playerChickens.Add(chickenCount, babyChicken);
-        chickenCount += 1;
+    { 
+
+        List<PlayerChicken> newChickens = new List<PlayerChicken>();
+        int chickenIndex = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            if(chickenIndex + 1 <= playerChickens.Count - 1)
+            {
+                int[] newChickenStats = breeding.AssignChickens(playerChickens[chickenIndex], playerChickens[chickenIndex + 1]);
+                PlayerChicken babyChicken = ChickenGenerator.genSetChicken(newChickenStats);
+                babyChicken.uniqueID = chickenCount;
+                newChickens.Add(babyChicken);
+                chickenCount += 1;
+                chickenIndex += 2;
+            }
+            else { break; }
+        }
+
+        while(newChickens.Count != 0)
+        {
+            if(playerChickens.Count + newChickens.Count > 18)
+            {
+                playerChickens.RemoveRange(0, (playerChickens.Count + newChickens.Count) - 18);
+            }
+            playerChickens.Add(newChickens[newChickens.Count - 1]);
+            newChickens.RemoveAt(newChickens.Count - 1);
+        }
     }
 
     private bool CheckChickenIdle(int chickenID) {
@@ -113,11 +138,11 @@ public class ChickenCoop : MonoBehaviour {
         }
     }
 
-    private int CalculatePercentile(int chickenID) {
+    /*private int CalculatePercentile(int chickenID) {
 
         Dictionary<int, int> allChickensStats = new Dictionary<int, int>();
 
-        foreach (PlayerChicken chicken in playerChickens.Values) {
+        foreach (PlayerChicken chicken in playerChickens) {
             int statTotal = chicken.strengthStat + chicken.dexterityStat + chicken.intelligenceStat + chicken.enduranceStat;
             allChickensStats.Add(chicken.uniqueID, statTotal);
         }
@@ -146,5 +171,5 @@ public class ChickenCoop : MonoBehaviour {
         var index = sortedList.FindIndex(key => key.Key == chickenID);
 
         return ((index + 1) * 100) / sortedList.Count;
-    }
+    }*/
 }

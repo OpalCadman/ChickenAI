@@ -19,6 +19,8 @@ public class ButtonManager : MonoBehaviour {
 
     bool trainingActive = false;
 
+    public bool coopAlive = false;
+
     // Use this for initialization
     void Start () {
         
@@ -69,14 +71,14 @@ public class ButtonManager : MonoBehaviour {
         }
 
 
-        //Add a boolean here "DoesCoopExist", we update this to true FROM the Chicken Coop itself.
-        if(chickenCoopRef.playerChickens.Count != 0)
+        if (coopAlive)
         {
-            if (chickenCoopRef.playerChickens[0].daysLeftUntilActive == 0) { trainingActive = false; }
+            if (chickenCoopRef.playerChickens.Count != 0)
+            {
+                if (chickenCoopRef.playerChickens[0].daysLeftUntilActive == 0) { trainingActive = false; }
+            }
         }
         
-
-
         if (trainingActive)
         {
             trainingButton.GetComponent<Button>().interactable = false;
@@ -171,13 +173,13 @@ public class ButtonManager : MonoBehaviour {
         {
             if (displaySlots >= 18) { break; }
 
-            chickenStats[displaySlots].GetComponent<Text>().text = "Name: " + chicken.Value.chickenName
-                                                    + "\nID: " + chicken.Value.uniqueID
-                                                    + "\nStatus: " + chicken.Value.currentStatus
-                                                    + "\n\tStrength: " + chicken.Value.strengthStat
-                                                    + "\n\tDexterity: " + chicken.Value.dexterityStat
-                                                    + "\n\tIntelligence: " + chicken.Value.intelligenceStat
-                                                    + "\n\tEndurance: " + chicken.Value.enduranceStat;
+            chickenStats[displaySlots].GetComponent<Text>().text = "Name: " + chicken.chickenName
+                                                    + "\nID: " + chicken.uniqueID
+                                                    + "\nStatus: " + chicken.currentStatus
+                                                    + "\n\tStrength: " + chicken.strengthStat
+                                                    + "\n\tDexterity: " + chicken.dexterityStat
+                                                    + "\n\tIntelligence: " + chicken.intelligenceStat
+                                                    + "\n\tEndurance: " + chicken.enduranceStat;
 
             displaySlots += 1;
         }
