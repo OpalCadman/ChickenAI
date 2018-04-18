@@ -10,10 +10,10 @@ public class ChickenMove : MonoBehaviour
     public GameObject chicken_2;
     public GameObject chicken_3;
 
-    float chicken_0_speed;
-    float chicken_1_speed;
-    float chicken_2_speed;
-    float chicken_3_speed;
+    float chicken_0_speed = 1f;
+    float chicken_1_speed = 2f;
+    float chicken_2_speed = 3f;
+    float chicken_3_speed = 4f;
 
     float chicken_0_mod;
     float chicken_1_mod;
@@ -70,38 +70,22 @@ public class ChickenMove : MonoBehaviour
 
     private void Stop()
     {
-
-        if (chickenmovespeed != 0f)
-        {
-            chickenmovespeed = 0f;
-        }
-
+        chickenmovespeed = 0f;
         Move();
     }
 
 
     private void Walk()
     {
-
-        if (chickenmovespeed != 0.5f)
-        {
-            chickenmovespeed = 0.5f;
-        }
-
+        chickenmovespeed = 0.5f;
         Move();
 
     }
 
     private void Run()
     {
-
-        if (chickenmovespeed != 0.5f)
-        {
-            chickenmovespeed = 0.5f;
-        }
-
+        chickenmovespeed = 0.5f;
         Move();
-
     }
 
     private void Move()
@@ -110,6 +94,8 @@ public class ChickenMove : MonoBehaviour
         {
             case 0:
                 chicken_0_speed = chickenmovespeed * chicken_0_mod;
+                //vec3 movement = new vec3 (chickenspeed, 0, 0);
+                //need to gravity if not on ground
                 break;
             case 1:
                 chicken_1_speed = chickenmovespeed * chicken_1_mod;
@@ -126,7 +112,9 @@ public class ChickenMove : MonoBehaviour
 
     private void Jump()
     {
-
+        //check if y = 0
+        //if true, do jump
+        //if false, do nothing
 
 
     }
