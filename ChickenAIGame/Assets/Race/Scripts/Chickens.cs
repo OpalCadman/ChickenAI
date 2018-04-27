@@ -6,7 +6,7 @@ public class Chickens : MonoBehaviour
 {
     public Transform target;
     public GameObject race;
-    float speed = 10f;
+    float speed = 4f;
     Vector3[] path;
     int target_index;
     public bool reset = false;
